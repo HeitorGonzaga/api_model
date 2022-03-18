@@ -14,6 +14,7 @@ class FuncionariosModel implements DataBase<IFuncionarios>{
       const {rows, rowCount} = await Postgresql.
         getInstance().
         client.query(`select * from funcionarios where id = $1`, [id]);
+        await Postgresql.getInstance().client.end();
       if(!rows){
         throw new Error();
       }
@@ -26,6 +27,7 @@ class FuncionariosModel implements DataBase<IFuncionarios>{
   async get(): Promise<IFuncionarios[]> {
     try {
       const sResult = await Postgresql.getInstance().client.query('select * from funcionarios');
+      await Postgresql.getInstance().client.end();
       return sResult.rows;
     } catch (err) {
       return [];
@@ -40,6 +42,7 @@ class FuncionariosModel implements DataBase<IFuncionarios>{
             (empresa, nome, data_nascimento, salario)
           values($1, $2, $3, $4)
         `, [object.empresa, object.nome, object.data_nascimento, object.salario]);
+        await Postgresql.getInstance().client.end();
     }catch(err){
       throw new Error(`Erro ao realizar insert ${err}`);
     }
@@ -48,6 +51,7 @@ class FuncionariosModel implements DataBase<IFuncionarios>{
   async delete(id: number): Promise<void> {
     try{
       await Postgresql.getInstance().client.query('delete from funcionarios where id = $1', [id]);
+      await Postgresql.getInstance().client.end();
     }catch(err){
       throw new Error(`Erro ao tentar realizar exclusão do ID ${id}, ${err}`);
     }
@@ -66,6 +70,7 @@ class FuncionariosModel implements DataBase<IFuncionarios>{
             where 
             id = $5
         `, [object.empresa, object.nome, object.data_nascimento, object.salario, object.id]);
+        await Postgresql.getInstance().client.end();
     }catch(err){
       throw new Error(`Erro ao realizar Update ${err}`);
     }

@@ -19,9 +19,7 @@ export default class Posgresql {
   }
 
   public static getInstance(): Posgresql {
-    if (!this.instance) {
-      Posgresql.instance = new Posgresql();
-    }
+    Posgresql.instance = new Posgresql();
     return Posgresql.instance;
   }
 
